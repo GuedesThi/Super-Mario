@@ -1,6 +1,7 @@
 const cano = document.querySelector('.cano');
 const mario = document.querySelector('.mario')
 const nuvens = document.querySelector('.nuvens')
+const mensagemPerdeu = document.querySelector('.perdeu');
 
 const jump = () => {
     mario.classList.add('pular');
@@ -9,11 +10,10 @@ const jump = () => {
     }, 600);
 };
 
-document.addEventListener('keydown', jump)
-document.addEventListener('touchstart', jump)
+document.addEventListener('keydown', jump);
+document.addEventListener('touchstart', jump);
 
-
-function atualizarJogo() {
+function gameOver() {
     const posicaoCano = cano.offsetLeft;
     const posicaoMario = +window.getComputedStyle(mario).bottom.replace('px', '');
     const posicaoNuvens = nuvens.offsetLeft;
@@ -32,11 +32,27 @@ function atualizarJogo() {
 
         document.removeEventListener('keydown', jump);
         document.removeEventListener('touchstart', jump);
+
+        mensagemPerdeu.style.display = 'flex'
+        mensagemPerdeu.style.justifyContent = 'center'
+        mensagemPerdeu.style.alignItems = 'center'
+        mensagemPerdeu.style.gap = '1rem'
+        mensagemPerdeu.style.flexDirection = 'column'
     }
 
     // Continuar o loop do jogo
-    requestAnimationFrame(atualizarJogo);
+    requestAnimationFrame(gameOver);
 }
 
 // Inicie o loop do jogo
-requestAnimationFrame(atualizarJogo);
+requestAnimationFrame(gameOver);
+
+mensagemPerdeu.document.addEventListener('click', reiniciar);
+
+function reiniciar() {
+    location.reload();
+    mensagemPerdeu.style.display = 'none';
+    jogoEmAndamento = true;
+    document.addEventListener('keydown', jump);
+    document.addEventListener('touchstart', jump);
+}
